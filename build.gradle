@@ -27,3 +27,7 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+shadowJar {
+    archiveFileName = 'NotAGPT.jar'
+}

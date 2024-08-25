@@ -80,10 +80,12 @@ public class TaskList {
         switch (taskType) {
         case T:
             task = ToDo.of(description, taskType);
+            saveTasks();
             break;
         case D:
             try {
                 task = Deadline.of(description + " /by " + parts[3], taskType);
+                saveTasks();
             } catch (TaskCreationException e) {
                 throw new IllegalArgumentException("Invalid task type: " + taskType);
             }
@@ -91,6 +93,7 @@ public class TaskList {
         case E:
             try {
                 task = Event.of(description + "/from " + parts[3] + " /to " + parts[4], taskType);
+                saveTasks();
             } catch (TaskCreationException e) {
                 System.out.println("Error occurred while parsing task");
                 throw new IllegalArgumentException("Invalid task type: " + taskType);
