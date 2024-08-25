@@ -24,15 +24,10 @@ public class Deadline extends Task {
             String[] parts = name.split("/by", 2);
             String taskName = parts[0].trim();
             String taskDeadline = parts[1].trim();
-            System.out.println(taskDeadline);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy h:mm a");
-
-            LocalDateTime deadline = LocalDateTime.parse(taskDeadline, formatter);
-
+            LocalDateTime deadline = formatter(taskDeadline);
             return new Deadline(taskName, taskType, deadline);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             line.drawLine();
             System.out.println("      Error ");
             line.drawLine();
@@ -45,6 +40,8 @@ public class Deadline extends Task {
         }
     }
 
+
+
     public String getBy() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
         return this.deadline.format(formatter);
@@ -54,4 +51,21 @@ public class Deadline extends Task {
     public String readTask() {
         return super.readTask() + " (by: " + this.getBy() + ")";
     }
+
+    public static LocalDateTime formatter(String s) throws DateTimeParseException {
+        DateTimeFormatter[] formatters = {
+                DateTimeFormatter.ofPattern("MMM d yyyy h:mm a"),
+                DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")  // Add more formats as needed
+        };
+
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                return LocalDateTime.parse(s, formatter);
+            } catch (DateTimeParseException e) {
+                // Continue to the next formatter
+            }
+        }
+        throw new DateTimeParseException("Date/time format is invalid", s, 0);
+    }
+
 }
